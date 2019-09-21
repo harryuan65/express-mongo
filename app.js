@@ -10,7 +10,7 @@ app.set("views",path.resolve("./src/views"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
-app.use('/stocker', require("./src/api/routes/api"));
+app.use('/stocker', require("./src/api/routes/stocker"));
 
 const router = express.Router();
 app.use(express.static(path.join(__dirname,'/public')));//這一行一定要放在use router上面

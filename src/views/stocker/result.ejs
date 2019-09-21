@@ -1,2 +1,11 @@
-<h2>Result: <%= result%> </h2>
-<%= message %>
+<h2 style="display: flex; flex-direction: row; justify-content: flex-start;">
+    <div>Result:</div>
+    <%if(typeof(status) !== "undefined"){%>
+      <%if(status){%>
+      <p style="color:#336633">Success</p>
+      <%}else{%>
+      <p style="color:#aa3333 ">Failed</p>
+      <%}%>
+    <%}%>
+</h2>
+<span><%= message %></span>
