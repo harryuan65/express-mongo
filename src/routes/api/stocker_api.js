@@ -1,21 +1,22 @@
 var express = require('express');
 var router = express.Router();
-const db = require("../mongo/mongo");
-db.connect_mongo();
+const db = require("../../api/mongo/mongo");
+// db.connect_mongo();
 
 function router_log(str){
     console.log(`[Stocker]${str}`);
 }
+
 router.get('/',(req,res)=>{
     res.set('Content-Type', 'text/html');
-    db.get_all("sheet").then(d=>{
-      router_log("Received: ")
-      router_log(d);
-      res.json(JSON.stringify(d,null,2));
-    })
+    res.send("api");
 });
 router.get('/all',(req,res)=>{
-
+    db.get_all("sheet").then(d=>{
+        router_log("Received: ")
+        router_log(d);
+        res.json(JSON.stringify(d,null,2));
+      })
 });
 
 router.get('/search',(req,res)=>{

@@ -1,0 +1,12 @@
+<%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
+<%- include('../partials/title.ejs',{subtitle:subtitle}) %>
+
+<form action="/stocker/search_home" method="post" class="form-group form-search">
+<input type="text" name="user_id" placeholder="使用者ID" class="form-control ">
+<input type="text" name="user_name" placeholder=使用者名稱" class="form-control">
+<input type="text" name="following_company" placeholder="追蹤公司" class="form-control">
+<button type="submit" class="btn btn-secondary">搜尋</button>
+</form>
+
+
+<%- include('../partials/lower.ejs') %>

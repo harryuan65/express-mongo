@@ -48,14 +48,15 @@ return testdata;
 
 function TestUser(val){
     var user = {
-        user_name:`Testee${val}`,
         user_id: Math.floor(Math.random() * 100),
+        user_name:`Testee${val}`,
         following_company: Math.floor(Math.random()*1000),
         model: {
             in_use:["A","B"],
             not_in_use:["C","D"]
         },
-        ratio: val
+        ratio: val,
+        cal_result:[0.5, true]
     }
     return user;
 }
