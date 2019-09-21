@@ -1,6 +1,10 @@
 const mongo = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
+function log(str){
+    console.log(`[Mongo] ${str}`)
+}
+
 function connect_mongo(){
     console.log("Connecting to MongoDB...");
     mongo.connect(url,{useNewUrlParser:true}, function (err, client) {
@@ -8,22 +12,25 @@ function connect_mongo(){
            throw err;
         }
         else{
-            console.log("Connected to MongoDB");
+            log("Connected to MongoDB");
             db_obj = client.db("stocker");
-            db_obj.createCollection("sheet",function(err,res){
-                if(err){
-                    console.log(err);
-                    client.close();
-                }else{
-                     console.log("Created");
-                }
-            })
+            createCollection("sheet");
         }
        });
 }
 
+function createCollection(name){
+    db_obj.createCollection(name,function(err,res){
+        if(err){
+            log(err);
+            client.close();
+        }else{
+             log(`Created collection: ${name}`);
+        }
+    })
+}
 
-function insert(val){
+function insert(collection_name,val){
     var data={
         assets:{
             cash:val,
@@ -67,7 +74,7 @@ function insert(val){
     },
     te:val
     };
-    db_obj.collection("sheet").insertOne(data,function(err,res){
+    db_obj.collection(collection_name).insertOne(data,function(err,res){
         if(err){
             console.log(err);
         }
@@ -77,11 +84,11 @@ function insert(val){
     })
 }
 
-function get_all(){
-   return db_obj.collection("sheet").find({}).toArray();    
+function get_all(collection_name){
+   return db_obj.collection(collection_name).find({}).toArray();
 }
 function drop_collection(collection_name){
-    db_obj.collection(collection_name).drop(function(err,ok){
+    return db_obj.collection(collection_name).drop(function(err,ok){
         if(err){
             console.log(err);
         }

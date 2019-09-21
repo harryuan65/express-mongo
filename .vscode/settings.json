@@ -1,7 +1,7 @@
 {
-    "powermode.explosionSize": 6,
+    "powermode.explosionSize": 30,
     "powermode.enabled": true,
-    "powermode.presets":"magic",
+    "powermode.presets":"fireworks",
     "powermode.enableShake": false,
     "powermode.shakeIntensity": 10,
 }
