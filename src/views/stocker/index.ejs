@@ -1,8 +1,21 @@
 <%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
 <%- include('../partials/title.ejs',{subtitle:subtitle}) %>
+    <div class="wrapper_out">
+       <a href="/stocker/list_collections" class="btn btn-secondary">List collections</a>
+    </div>
+
+    <div class="wrapper_out">
+        <a href="/stocker/all" class="btn btn-secondary">All</a>
+    </div>
 
     <div class="wrapper_out">
         <a href="/stocker/search_home" class="btn btn-secondary">Search Home</a>
     </div>
+    <div class="wrapper_out">
+            <a href="/stocker/insert_home" class="btn btn-secondary">Insert Home</a>
+    </div>
 
+    <div class="wrapper_out">
+            <a href="/stocker/drop_home" class="btn btn-danger">Drop Home</a>
+    </div>
 <%- include('../partials/lower.ejs') %>

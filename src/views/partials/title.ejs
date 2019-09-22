@@ -1,4 +1,14 @@
+<script>
+function back(){
+  window.history.back();
+}
+</script>
 <div class="title">
-  <h1>Stockers</h1>
-  <h2><%= subtitle%></h2>
+  <h1><a href="/stocker/">Stockers</a></h1>
+<div class="second-row">
+    <h2><%= subtitle%></h2>
+    <% if(subtitle!="Home"){%>
+    <button onclick="back()" class="btn btn-primary btn-second-row">Back</button>
+    <%}%>
+  </div>
 </div>

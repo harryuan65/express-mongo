@@ -9,3 +9,16 @@
     margin: 20px;
     width: 300px;
 }
+
+.second-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.btn-second-row{
+    margin-left: 30px;
+}
+.result{
+    margin:30px;
+}

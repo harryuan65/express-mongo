@@ -1,11 +1,18 @@
-<h2 style="display: flex; flex-direction: row; justify-content: flex-start;">
-    <div>Result:</div>
+<%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
+<%- include('../partials/title.ejs',{subtitle:"Result"}) %>
+<div class='result'>
+  <h2>
     <%if(typeof(status) !== "undefined"){%>
       <%if(status){%>
-      <p style="color:#336633">Success</p>
+      <p style="color:#447744;">Success</p>
       <%}else{%>
-      <p style="color:#aa3333 ">Failed</p>
+      <p style="color:#aa3333;">Failed</p>
       <%}%>
     <%}%>
-</h2>
-<span><%= message %></span>
+  </h2>
+  <h4><%= message%></h4>
+  <% if(typeof(data) !== "undefined"){%>
+    <span><%= data %></span>
+  <%}%>
+</div>
+<%- include('../partials/lower.ejs') %>

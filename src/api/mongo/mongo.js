@@ -32,20 +32,6 @@ function createCollection(name){
     })
 }
 
-function insert(collection_name,val){
-    db_obj.collection(collection_name).insertOne(data,function(err,res){
-        if(err){
-            log(err);
-        }
-        else{
-            log("Success: inserted\n\t "+res.insertedId+"\n\t"+res.insertedCount);
-       }
-    })
-}
-
-function get_all(collection_name){
-   return db_obj.collection(collection_name).find({}).toArray();
-}
 function drop_collection(collection_name){
     db_obj.collection(collection_name).drop(function(err,ok){
         if(err){
@@ -58,9 +44,47 @@ function drop_collection(collection_name){
         }
     });
 }
+
+function list_collections(){
+    return db_obj.listCollections().toArray();
+}
+var a = {
+    k1:"v1",
+    k2:"v2",
+    k3:""
+}
+
+function filter(data){
+    var newobj = {};
+    for(var key in data){
+        if(data[key]!="")
+         {
+             newobj[key]=data[key];
+         }
+    }
+    return newobj;
+}
+
+function where(payload){
+    log(`Search for ${payload.collection} ${JSON.stringify(payload.data)}`);
+    return db_obj.collection(payload.collection).find(filter(payload.data)).toArray();
+}
+function get_all(collection_name){
+    return db_obj.collection(collection_name).find({}).toArray();
+}
+
+function insert(payload){
+    log(`Inserting ${JSON.stringify(payload)}`)
+    return db_obj.collection(payload.collection).insertOne(payload.data);
+}
+
+
+
 module.exports = {
    connect_mongo,
+   list_collections,
    insert,
    get_all,
+   where,
    drop_collection
 };

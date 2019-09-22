@@ -1,0 +1,21 @@
+<%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
+<%- include('../partials/title.ejs',{subtitle:subtitle}) %>
+
+<script>
+function check(){
+    var r = confirm(`Are you sure to drop ${document.getElementById('input-collection').nodeValue}?`);
+    if(r){
+        document.getElementById('form-search').submit();
+    }
+    else{
+        alert("Canceled.")
+    }
+}
+</script>
+<form action="/stocker/drop" method="post" class="form-group form-search" id="form-search">
+<input type="text" name="collection" placeholder="collection" class="form-control" id="input-collection">
+<button class="btn btn-danger" onclick="check">Drop</button>
+</form>
+
+
+<%- include('../partials/lower.ejs') %>

@@ -14,8 +14,15 @@ function info(req,res,next){
     console.log(req.body);
     next();
 }
-
-router.use(bodyParser.urlencoded({ extended: false }));
+function packdata(params){
+    var collection = params.collection;
+    delete params.collection;
+    return {
+        collection:collection,
+        data: params
+    };
+}
+router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.use(express.static('public/'));//有這一行才吃的到CSS link href=""
@@ -27,56 +34,82 @@ router.get('/',(req,res)=>{
     res.render("stocker/index",{subtitle:"Home"});
 });
 
-router.get('/search_home',(req,res)=>{
-    res.render("stocker/search_home",{subtitle:"Search Home"});
-});
-router.post('/search_home',info,(req,res)=>{
-    var result = null;
-    var data = null;
-    if(req.params){
-        result = true;
-        data = JSON.stringify(req.body);
-    }
-    else{
-        result = false;
-        data = "Nothing found";
-    }
-    res.render("stocker/result",{status:result,message:data});
+router.get('/list_collections',(req,res)=>{
+   db.list_collections().then(d=>{
+       router_log("All collections:");
+       router_log(JSON.stringify(d));
+       res.render('stocker/result',{status: true,message:`All collections as below`,data:`${JSON.stringify(d)}`});
+   })
 })
-router.get('/all',(req,res)=>{
-    db.get_all("sheet").then(d=>{
+router.get('/all',info,(req,res)=>{
+    var collection = "sheet";
+    db.get_all(collection).then(d=>{
         router_log("Received: ")
-        router_log(d);
-        res.json(JSON.stringify(d,null,2));
+        router_log(JSON.stringify(d));
+        res.render('stocker/result',{status: true,message:`Collection: ${collection}`,data:`${JSON.stringify(d)}`})
       })
 });
 
-router.get('/search',(req,res)=>{
-    router_log("search params:");
-    router_log(req.params);
-    res.json(req.params);
-    // db.search(req.param).then(d=>{
-    //     router_log("Received: ")
-    //     router_log(d);
-    //     res.json(JSON.stringify(d,null,2));
-    //   })
+router.get('/search_home',(req,res)=>{
+    res.render("stocker/search_home",{subtitle:"Search Home"});
 });
-router.get('/drop',(req,res)=>{
-    router_log("Dropping collection");
 
+router.post('/search',info,(req,res)=>{
+    if(!req.body.collection){
+        res.render("stocker/result",{status:false, message:"Collection required"});
+    }
+
+    if(req.body){
+      db.where(packdata(req.body))
+      .then(ret=>{
+        //   res.json(ret);
+        //  console.log(ret);
+         res.render("stocker/result",{status:ret.result.ok,message:"Found",data: (JSON.stringify(ret))});
+        })
+        .catch(err=>{
+            // res.json(err);
+        })
+    }else{
+        res.render("stocker/result",{status:false, message:"Search keywords required"});
+    }
+})
+
+router.get('/insert_home',info,(req,res)=>{
+    res.render('stocker/insert_home',{subtitle:"Insert Home"});
+})
+router.post('/insert',info,(req,res)=>{
+    var insert_payload = packdata(req.body);
+    db.insert(insert_payload)
+       .then(ret=>{
+        console.log(ret.ops);
+       res.render('stocker/result',{status:true, message:`Insert into collection \'${insert_payload.collection}\'`,data:`${JSON.stringify(ret.ops)}`});
+    })
+       .catch(err=>{
+           console.log(`Error: ${err}`)
+        res.render('stocker/result',{status:false,message: `Error: ${err}`})
+    })
+})
+
+
+
+router.get('/drop_home',info,(req,res)=>{
+    res.render('stocker/drop_home',{subtitle:"Drop Home"});
+})
+router.post('/drop',info,(req,res)=>{
     result = false;
+    var name = '';
     if(req.query.collection) {
         router_log(`Dropping by query ${req.query.collection}`)
         db.drop_collection(req.query.collection);
+        name = req.query.collection;
     }
-    if(req.params.collection){
-        router_log(`Dropping by params ${req.params.collection}`)
-        db.drop_collection(req.params.collection);
+    if(req.body.collection){
+        router_log(`Dropping by body(collection name: ${req.body.collection})`)
+        db.drop_collection(req.body.collection);
+        name = req.body.collection;
     }
-    res.render('stocker/result',{message:`Dropped ${req.query.collection}`})
+    res.render('stocker/result',{message:`Dropped collection \'${name}\'`})
 });
 
-router.post('/insert',(req,res)=>{
-    router_log(req.body);
-})
+
 module.exports = router;
