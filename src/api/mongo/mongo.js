@@ -7,51 +7,37 @@ function log(str){
     console.log(`[Mongo] ${str}`)
 }
 
-function connect_mongo(){
-    console.log("Connecting to MongoDB...");
+function connect_mongo(src=""){
+    log(`${src} Connecting to MongoDB...`);
     mongo.connect(url,{useNewUrlParser:true,useUnifiedTopology: true}, function (err, client) {
         if(err) {
            throw err;
         }
         else{
-            log(`Connected to MongoDB, database: ${db_name}`);
             db_obj = client.db(db_name);
-            createCollection("sheet");
+            log(`${src} Connected to MongoDB, database: ${db_name}`);
+            createCollection("sheet")
+            .then(ret=>{
+                log(`${src} Created Collection => [name:`+JSON.stringify(ret.s.namespace.collection)+", id:"+JSON.stringify(ret.s.pkFactory.index)+", db:"+JSON.stringify(ret.s.namespace.db)+"]" );
+            })
+            .catch(err=>{
+                log(`${src} ${err}`);
+                client.close();
+            })
         }
        });
 }
 
 function createCollection(name){
-    db_obj.createCollection(name,function(err,res){
-        if(err){
-            log(err);
-            client.close();
-        }else{
-             log(`Created collection: ${name}`);
-        }
-    })
+    return db_obj.createCollection(name);
 }
 
-function drop_collection(collection_name){
-    db_obj.collection(collection_name).drop(function(err,ok){
-        if(err){
-            log(err);
-            return false;
-        }
-        if(ok){
-            log(`Dropped ${collection_name}`);
-            return true;
-        }
-    });
+function dropCollection(collection_name){
+   return db_obj.collection(collection_name).drop();
 }
 
 function list_collections(){
     return db_obj.listCollections().toArray();
-}
-var a = {
-    k1:"v1",
-    k2:"v2",
-    k3:""
 }
 
 function filter(data){
@@ -66,8 +52,9 @@ function filter(data){
 }
 
 function where(payload){
-    log(`Search for ${payload.collection} ${JSON.stringify(payload.data)}`);
-    return db_obj.collection(payload.collection).find(filter(payload.data)).toArray();
+    var search_params = filter(payload.data);
+    log(`Search for \"${payload.collection}\" ${JSON.stringify(search_params)}`);
+    return db_obj.collection(payload.collection).find(search_params).toArray();
 }
 function get_all(collection_name){
     return db_obj.collection(collection_name).find({}).toArray();
@@ -77,7 +64,12 @@ function insert(payload){
     log(`Inserting ${JSON.stringify(payload)}`)
     return db_obj.collection(payload.collection).insertOne(payload.data);
 }
-
+function update(payload){
+    log(`Update ${JSON.stringify(payload)}`);
+    var update_params = payload.data.to;
+    delete payload.data.to;
+    return db_obj.collection(payload.collection).updateOne(payload.data,{$set:update_params});
+}
 
 
 module.exports = {
@@ -86,5 +78,7 @@ module.exports = {
    insert,
    get_all,
    where,
-   drop_collection
+   createCollection,
+   dropCollection,
+   update
 };

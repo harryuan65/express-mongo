@@ -1,0 +1,11 @@
+<%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
+<%- include('../partials/title.ejs',{subtitle:subtitle}) %>
+
+<form action="/stocker/create_collection" method="post" class="form-group form-search">
+    <label>Collection名稱</label>
+    <input type="text" name="collection" value="sheet" placeholder="Collection名稱" class="form-control ">
+<button type="submit" class="btn btn-secondary">搜尋</button>
+</form>
+
+
+<%- include('../partials/lower.ejs') %>

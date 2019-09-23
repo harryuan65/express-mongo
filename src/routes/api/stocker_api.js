@@ -1,50 +1,80 @@
 var express = require('express');
 var router = express.Router();
 const db = require("../../api/mongo/mongo");
-// db.connect_mongo();
+const tools = require('../../api/middleware/route_utils');
 
-function router_log(str){
-    console.log(`[Stocker]${str}`);
+db.connect_mongo("stocker_api");
+
+function api_log(str){
+    console.log(`[StockerApi]${str}`);
 }
 
 router.get('/',(req,res)=>{
     res.set('Content-Type', 'text/html');
-    res.send("api");
+    res.status(200).send("Api is on");
 });
-router.get('/all',(req,res)=>{
-    db.get_all("sheet").then(d=>{
-        router_log("Received: ")
-        router_log(d);
-        res.json(JSON.stringify(d,null,2));
+
+router.get('/all',tools.info,(req,res)=>{
+    var collection = "sheet";
+    db.get_all(collection).then(d=>{
+        api_log("Received: ")
+        api_log(JSON.stringify(d));
+        res.json(d);
       })
 });
 
-router.get('/search',(req,res)=>{
-    router_log("search params:");
-    router_log(req.params);
-    res.json(req.params);
-    // db.search(req.param).then(d=>{
-    //     router_log("Received: ")
-    //     router_log(d);
-    //     res.json(JSON.stringify(d,null,2));
-    //   })
-});
-router.get('/drop',(req,res)=>{
-    router_log("Dropping collection");
-
-    result = false;
-    if(req.query.collection) {
-        router_log(`Dropping by query ${req.query.collection}`)
-        db.drop_collection(req.query.collection);
-    }
-    if(req.params.collection){
-        router_log(`Dropping by params ${req.params.collection}`)
-        db.drop_collection(req.params.collection);
-    }
-    res.render('stocker/result',{message:`Dropped ${req.query.collection}`})
+router.post('/insert',tools.info,(req,res)=>{
+    var insert_payload = tools.packdata(req.body);
+    db.insert(insert_payload)
+       .then(ret=>{
+        console.log(ret.ops);
+        res.json(ret);
+    })
+       .catch(err=>{
+        console.log(`Error: ${err}`)
+        res.json(err);
+    })
 });
 
-router.post('/insert',(req,res)=>{
-    router_log(req.body);
+router.post('/search',tools.info,(req,res)=>{
+    if(!req.body.collection){
+        res.send("Collection required");
+    }
+
+    if(req.body){
+      db.where(packdata(req.body))
+      .then(ret=>{
+          console.log(ret);
+          res.json(ret);
+        })
+        .catch(err=>{
+            console.log(ret);
+            res.json(err);
+        })
+    }else{
+        res.send("Search keywords required");
+    }
+});
+router.post('/update',tools.info,(req,res)=>{
+    api_log(`Updating ${req.body}`)
+  db.update(tools.packdata(req.body))
+    .then(ret=>{
+      console.log(ret);
+      res.json(ret);
+    })
+    .catch(err=>{
+      api_log(err);
+      res.json(err);
+    })
 })
+router.get('/list_collections',(req,res)=>{
+    db.list_collections().then(ret=>{
+        api_log("All collections:");
+        res.json(ret.map(d=>{
+            api_log(JSON.stringify(d));
+            return JSON.stringify(d)
+           }));
+    })
+ });
+
 module.exports = router;
