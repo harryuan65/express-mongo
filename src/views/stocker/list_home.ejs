@@ -1,0 +1,11 @@
+<%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
+<%- include('../partials/title.ejs',{subtitle:subtitle}) %>
+
+<form action="/stocker/list_collections" method="post" class="form-group form-search">
+    <label>DB名稱</label>
+    <input type="text" name="db_name" placeholder="DB名稱" class="form-control ">
+    <button type="submit" class="btn btn-secondary">查看list</button>
+</form>
+
+
+<%- include('../partials/lower.ejs') %>

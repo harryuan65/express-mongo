@@ -2,15 +2,17 @@
 <%- include('../partials/title.ejs',{subtitle:subtitle}) %>
 
 <form action="/stocker/insert" method="post" class="form-group form-search">
+    <label>DB名稱</label>
+    <input type="text" name="db_name" placeholder="DB名稱" class="form-control ">
     <label>Collection名稱</label>
-    <input type="text" name="collection" value="sheet" placeholder="Collection名稱" class="form-control ">
+    <input type="text" name="collection_name" value="sheet" placeholder="Collection名稱" class="form-control ">
     <label>使用者ID</label>
     <input type="text" name="user_id" value="<%= Math.floor(Math.random()*100)%>""" placeholder="使用者ID" class="form-control ">
     <label>使用者名稱</label>
     <input type="text" name="user_name" value="harry" placeholder=使用者名稱" class="form-control">
     <label>追蹤中公司</label>
     <input type="text" name="following_company" value="<%= Math.floor(Math.random()*1000)%>""" placeholder="追蹤公司" class="form-control">
-<button type="submit" class="btn btn-secondary">搜尋</button>
+<button type="submit" class="btn btn-secondary">>> Insert</button>
 </form>
 
 

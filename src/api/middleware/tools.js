@@ -5,10 +5,11 @@ function info(req,res,next){
     next();
 }
 function packdata(params){
-    var collection = params.collection;
-    delete params.collection;
+    var collection_name = params.collection_name;
+    delete params.collection_name;
+    delete params.db_name;
     return {
-        collection:collection,
+        collection_name:collection_name,
         data: params
     };
 }

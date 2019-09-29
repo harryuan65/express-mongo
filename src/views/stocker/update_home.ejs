@@ -1,7 +1,7 @@
 <%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
 <%- include('../partials/title.ejs',{subtitle:subtitle}) %>
 
-<form action="/stocker/search" method="post" class="form-group form-search">
+<form action="/stocker/update" method="post" class="form-group form-search">
     <label>DB名稱</label>
     <input type="text" name="db_name" placeholder="DB名稱" class="form-control ">
     <label>Collection名稱</label>
@@ -12,7 +12,14 @@
     <input type="text" name="user_name" value="harry" placeholder=使用者名稱" class="form-control">
     <label>追蹤中公司</label>
     <input type="text" name="following_company" value="" placeholder="追蹤公司" class="form-control">
-<button type="submit" class="btn btn-secondary">搜尋</button>
+<hr>
+    <label>新ID</label>
+    <input type="text" name="to[user_id]" placeholder="使用者ID" class="form-control ">
+    <label>新使用者名稱</label>
+    <input type="text" name="to[user_name]" value="harry" placeholder=使用者名稱" class="form-control">
+    <label>新追蹤中公司</label>
+    <input type="text" name="to[following_company]" value="" placeholder="追蹤公司" class="form-control">
+<button type="submit" class="btn btn-secondary">Update</button>
 </form>
 
 

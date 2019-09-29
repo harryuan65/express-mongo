@@ -1,12 +1,12 @@
 <%- include('../partials/upper.ejs',{doc_name:"Stocker"}) %>
 <%- include('../partials/title.ejs',{subtitle:subtitle}) %>
 
-<form action="/stocker/create_collection" method="post" class="form-group form-search">
+<form action="/stocker/all" method="post" class="form-group form-search">
     <label>DB名稱</label>
-    <input type="text" name="db_name" placeholder="DB名稱" class="form-control ">
+    <input type="text" name="db_name" value="stocker" placeholder="DB名稱" class="form-control ">
     <label>Collection名稱</label>
     <input type="text" name="collection_name" placeholder="Collection名稱" class="form-control ">
-<button type="submit" class="btn btn-secondary">新增collection</button>
+    <button type="submit" class="btn btn-secondary">Get All</button>
 </form>
 
 

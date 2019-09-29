@@ -13,7 +13,10 @@ function check(){
 }
 </script>
 <form action="/stocker/drop" method="post" class="form-group form-search" id="form-search">
-<input type="text" name="collection" placeholder="collection" class="form-control" id="input-collection">
+    <label>DB名稱</label>
+   <input type="text" name="db_name" placeholder="DB名稱" class="form-control" id="input-collection">
+    <label>Collection名稱</label>
+   <input type="text" name="collection_name" placeholder="Collection名稱" class="form-control" id="input-collection">
 <button class="btn btn-danger" onclick="check">Drop</button>
 </form>
 

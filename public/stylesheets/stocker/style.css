@@ -1,7 +1,9 @@
 .title{
     margin: 20px;
 }
-
+.title_txt:hover{
+   text-decoration: none; 
+}
 .wrapper_out{
     margin: 20px;
 }

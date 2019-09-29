@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const db = require("../../api/mongo/mongo");
-const tools = require('../../api/middleware/route_utils');
+const tools = require('../../api/middleware/tools');
 
 db.connect_mongo("stocker_api");
 
@@ -57,7 +57,7 @@ router.post('/search',tools.info,(req,res)=>{
 });
 router.post('/update',tools.info,(req,res)=>{
     api_log(`Updating ${req.body}`)
-  db.update(tools.packdata(req.body))
+    db.update(tools.packdata(req.body))
     .then(ret=>{
       console.log(ret);
       res.json(ret);
